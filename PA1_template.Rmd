@@ -1,15 +1,61 @@
+Peer Assessment #1
+========================================================
+
+library(knitr)
+
 # Reproducible Research: Peer Assessment 1
+
+Author: erinosb
+Date:   August 16th, 2014 
 
 
 ## Loading and preprocessing the data
+**Loading and preprocessing the data**  
 
+```{r}
+setwd("~/Dropbox/Courses/Coursera/ReproducibleResearch")  
+repdata.df <- read.csv("activity.csv")  
+```
 
+**Basic EDA**
+```{r}
+dim(repdata.df)  
+head(repdata.df) 
+str(repdata.df)
+```
+  
 
 ## What is mean total number of steps taken per day?
+**What is mean total number of steps taken per day?**  
 
+```{r}
+
+##Make a histogram of the total number of steps taken each day
+attach(repdata.df)
+hist(by(repdata.df$steps, date, function(x) mean(x)))
+
+##Calculate and report the mean and median total number of steps taken per day
+mean(as.vector(by(repdata.df$steps, date, function(x) mean(x))), na.rm = TRUE)
+median(as.vector(by(repdata.df$steps, date, function(x) mean(x))), na.rm = TRUE)
+help(mean)
+```
 
 
 ## What is the average daily activity pattern?
+```{r}
+
+##Make a time series plot
+intervalmeans <- sapply(split(repdata.df$steps, interval), function(x) mean(x, na.rm=TRUE))
+plot(names(intervalmeans), intervalmeans, type = "l",
+     main = "Steps per interval, averaged over days",
+     xlab = "interval",
+     ylab = "mean steps", 
+     las = 1)
+
+
+#Which 5 minute interval contains the maximum number of steps?
+names(which(intervalmeans == max(intervalmeans)))
+```
 
 
 
